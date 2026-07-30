@@ -1,5 +1,6 @@
 package com.example.transcripttest
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -11,11 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonShapes
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -28,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.transcripttest.screens.ExportScreen
 import com.example.transcripttest.screens.StartupScreen
@@ -44,6 +51,10 @@ enum class Routes(val title: String) {
 fun App(
     navController: NavHostController = rememberNavController()
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = Routes.valueOf(
+        backStackEntry?.destination?.route ?: Routes.Startup.name
+    )
     Scaffold { innerPadding ->
         Row(
             modifier = Modifier
@@ -53,21 +64,25 @@ fun App(
             Column(
                 modifier = Modifier.fillMaxHeight().width(100.dp)
                     .drawBehind {
-                        val strokeWidth = 1* density
+                        val strokeWidth = 1 * density
                         val y = size.height - strokeWidth / 2
 
                         drawLine(
                             Color.Black,
-                            Offset(size.width, 0f),
-                            Offset(size.width, y),
+                            Offset(size.width + 1, 0f),
+                            Offset(size.width + 1, y),
                             strokeWidth
                         )
                     }
             ) {
                 Routes.entries.forEach {
                     TextButton(
+                        shape = RectangleShape,
                         onClick = { navController.navigate(it.name) },
-                        modifier = Modifier
+                        colors = ButtonDefaults.textButtonColors(
+                            containerColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                            contentColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.surface else Color.Unspecified,
+                        )
                     ) {
 
                         Text(
