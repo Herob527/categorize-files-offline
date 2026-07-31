@@ -5,7 +5,5 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
-    id("com.google.devtools.ksp") version "2.3.4" apply false
-
 
 }
