@@ -2,11 +2,18 @@
 
 This is the desktop variant of original fullstack transcript-categorization project that can be found [there](https://github.com/Herob527/categorize-files).
 
-I've decided that I want to learn Jetpack Compose, so I've decided to create offline desktop variant of it with some additions that will be covered in scope.
+I've decided that I want to learn Jetpack Compose to compare it to Flutter, so I've decided to create offline desktop variant of it with some additions / changes that will be covered in scope.
 
 At first, I'm going to make it local-only that integration with backend would be fully optional thing.
 
 ## Current scope
+
+### Targets
+
+- Windows (.msi)
+- Linux (.appgimage)
+
+Not owning MacOS so I cannot reliably test it
 
 ### Projects view
 
@@ -15,15 +22,16 @@ Projects will be stored in folders on disk.
 - [] Create new project
 - [] Pick folder to store project data
 - [] Display recent projects
-- [] Quick summary of project (directory, total data, current progress)
+- [] Quick summary of project (directory, counts of audios and categories , current progress of transcription and categorization)
 
 #### Options
 
-Each project item will have configuration dialog with following options:
+Each project item will have configuration view (big dialog or separate route) with following options:
 
 - [] Manage categories (remove, rename)
 - [] Remove project
 - [] Rename project
+- [] Add audio to / remove item from project
 
 ### Transcript view
 
@@ -34,6 +42,7 @@ Each transcript item will have capability to attach category, update transcripti
 - [] Sort items by audio length or category name
 - [] Paginate items with option to change page size
 - [] Remove entry (with modal)
+- [] Auto-save changes into SQLite DB
 
 #### Category item
 
