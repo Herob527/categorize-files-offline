@@ -1,29 +1,69 @@
-This is a Kotlin Multiplatform project targeting Desktop (JVM).
+# Transcription categorization project — Desktop
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+This is the desktop variant of original fullstack transcript-categorization project that can be found [there](https://github.com/Herob527/categorize-files).
 
-### Running the apps
+I've decided that I want to learn Jetpack Compose, so I've decided to create offline desktop variant of it with some additions that will be covered in scope.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+At first, I'm going to make it local-only that integration with backend would be fully optional thing.
 
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
+## Current scope
 
-### Running tests
+### Projects view
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+Projects will be stored in folders on disk.
 
-- Desktop tests: `./gradlew :shared:jvmTest`
+- [] Create new project
+- [] Pick folder to store project data
+- [] Display recent projects
+- [] Quick summary of project (directory, total data, current progress)
 
----
+#### Options
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…# categorize-files-offline
-# categorize-files-offline
+Each project item will have configuration dialog with following options:
+
+- [] Manage categories (remove, rename)
+- [] Remove project
+- [] Rename project
+
+### Transcript view
+
+Each transcript item will have capability to attach category, update transcription, play audio or removing entry.
+
+- [] Write / clear transcript
+- [] Play / pause audio
+- [] Sort items by audio length or category name
+- [] Paginate items with option to change page size
+- [] Remove entry (with modal)
+
+#### Category item
+
+- [] Attach / detach category to audio / transcript
+- [] Add category to project
+- [] Remove category from project (cascade removal with confirm modal)
+
+#### Audio item
+
+- [] Play / pause audio
+- [] If possible, use waveform instead of mundane audio player
+- [] Add keyboard shortcut to play audio
+- [] Replace audio
+
+### Export view
+
+Export view will enable user to some degree of customization of output for later processing
+
+- [] Create formatted transcript, so user can pick, what properties should be includes in lines (category index / name, audio length, text, audio name)
+- [] Add capability for user to pick if everything should be in one folder or separated by categories (optionally: audios shall be in wavs and transcript in root)
+- [] Add capability to pick if transcript should be created in the first place
+- [] Add option to archive (by default it'll create output)
+- [] Notify user about export status
+- [] To check if user could still edit when exporting is going on (to avoid data corruption)
+
+## Ideas (non goals)
+
+- [] Metadata in export (requires JSON creation pipeline)
+- [] Integration with backend from [there](https://github.com/Herob527/categorize-files).
+It'd require project, auth support host configuration and deployment readiness
+- [] Auth support
+- [] Offline and online project separation
+- [] Whisper host integration
