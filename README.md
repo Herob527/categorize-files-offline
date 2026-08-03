@@ -76,3 +76,31 @@ It'd require project, auth support host configuration and deployment readiness
 - [] Auth support
 - [] Offline and online project separation
 - [] Whisper host integration
+
+## Current DB schema per project
+
+### Category
+
+- id (int primary key)
+- name (unique string)
+
+### Text
+
+- id (int primary key)
+- text (string)
+
+### Audio
+
+- id (int primary key)
+- path (unique string)
+- name (string)
+
+### TranscriptAudio
+
+- audioId (int)
+- transcriptId (int)
+
+### CategoryAudio
+
+- audioId (int)
+- categoryId (int)
