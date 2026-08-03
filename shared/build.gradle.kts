@@ -11,11 +11,9 @@ kotlin {
     jvm()
 
     sourceSets {
-        nativeMain.dependencies {
-            implementation("app.cash.sqldelight:native-driver:2.3.2")
-        }
         commonMain.dependencies {
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+            implementation(libs.koin)
+            implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.room3.runtime)
             implementation(libs.androidx.sqlite.bundled)
 
