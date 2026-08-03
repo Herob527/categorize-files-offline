@@ -20,6 +20,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -33,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.transcripttest.di.initKoin
 import com.example.transcripttest.screens.ExportScreen
 import com.example.transcripttest.screens.StartupScreen
 import com.example.transcripttest.screens.TranscriptScreen
@@ -52,6 +54,7 @@ fun App(
     val currentScreen = Routes.valueOf(
         backStackEntry?.destination?.route ?: Routes.Startup.name
     )
+    remember { initKoin() }
     Scaffold { innerPadding ->
         Row(
             modifier = Modifier
