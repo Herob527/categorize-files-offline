@@ -10,6 +10,9 @@ plugins {
 kotlin {
     jvm()
 
+    room3 {
+        schemaDirectory("$projectDir/schemas")
+    }
     sourceSets {
         commonMain.dependencies {
             implementation(libs.koin)

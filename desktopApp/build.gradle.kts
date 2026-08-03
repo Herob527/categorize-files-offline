@@ -18,6 +18,10 @@ dependencies {
 }
 
 compose.desktop {
+
+    room3 {
+        schemaDirectory("$projectDir/schemas")
+    }
     application {
         mainClass = "com.example.transcripttest.MainKt"
 
