@@ -15,7 +15,10 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.koin)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.room3.runtime)
             implementation(libs.androidx.sqlite.bundled)
