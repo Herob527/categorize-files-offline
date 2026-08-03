@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class ExportConfig(
     val shouldZip: Boolean,
     val divideByCategory: Boolean,
-    val omitEmpty: Boolean,
+    val omitEmptyTexts: Boolean,
     val exportText: String,
     val textFormat: String,
 )
