@@ -1,4 +1,4 @@
-package com.example.transcripttest.entities
+package com.example.transcripttest.data.local.entity
 
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
