@@ -9,6 +9,4 @@ data class Project(
     val absoluteRootPath: String = "",
     val dbName: String = "project.db",
     val lastExportConfig: ExportConfig?,
-) {
-    fun getDbPath() = Path(absoluteRootPath, dbName).toString()
-}
+)
