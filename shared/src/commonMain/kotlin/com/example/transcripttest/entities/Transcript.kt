@@ -5,6 +5,6 @@ import androidx.room3.PrimaryKey
 
 @Entity
 data class Transcript(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val text: String
 )
