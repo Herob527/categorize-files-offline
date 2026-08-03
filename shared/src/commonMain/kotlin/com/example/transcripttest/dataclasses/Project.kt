@@ -5,4 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Project(
     val audioPath: String = "audio",
-    val name: String = "<Nameless>")
+    val name: String = "<Nameless>",
+    val lastExportConfig: ExportConfig?
+)
