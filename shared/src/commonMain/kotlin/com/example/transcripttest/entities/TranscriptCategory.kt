@@ -5,6 +5,7 @@ import androidx.room3.ForeignKey
 import androidx.room3.ForeignKey.Companion.RESTRICT
 
 @Entity(
+    primaryKeys = ["categoryId", "transcriptId"],
     foreignKeys = [
         ForeignKey(
             entity = Category::class,
