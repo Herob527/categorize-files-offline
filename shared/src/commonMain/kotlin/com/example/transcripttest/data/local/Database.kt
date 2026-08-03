@@ -22,7 +22,3 @@ import com.example.transcripttest.data.local.entity.TranscriptCategory
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase()
-
-expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
-    override fun initialize(): AppDatabase
-}
