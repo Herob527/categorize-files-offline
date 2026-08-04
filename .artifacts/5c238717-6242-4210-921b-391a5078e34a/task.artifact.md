@@ -1,3 +1,0 @@
-- `[x]` Remove redundant `androidx.navigation` dependency from `shared/build.gradle.kts`
-- `[x]` Verify build for `:desktopApp`
-- `[x]` Create walkthrough
