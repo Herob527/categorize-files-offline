@@ -23,7 +23,7 @@ compose.desktop {
     }
     application {
         mainClass = "com.example.transcripttest.MainKt"
-
+        jvmArgs("-Dcompose.reload.devToolsEnabled=false")
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.AppImage)
             packageName = "com.example.transcripttest"
