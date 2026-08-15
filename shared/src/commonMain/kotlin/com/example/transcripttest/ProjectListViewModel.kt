@@ -13,9 +13,14 @@ class ProjectListViewModel : ViewModel() {
 
     fun setProject(newProject: Project) = _projectListState
         .update { currentState ->
+            val newPaths = if (newProject in currentState.paths) {
+                listOf(newProject, *currentState.paths.minus(newProject).toTypedArray())
+            } else {
+                currentState.paths.plus(newProject)
+            }
             ProjectsList(
                 currentProject = newProject,
-                paths = currentState.paths.plus(newProject)
+                paths = newPaths
             )
         }
 
