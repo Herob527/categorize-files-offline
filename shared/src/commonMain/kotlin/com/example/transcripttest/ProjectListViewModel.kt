@@ -5,30 +5,26 @@ import com.example.transcripttest.dataclasses.Project
 import com.example.transcripttest.dataclasses.ProjectsList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class ProjectListViewModel : ViewModel() {
     private val _projectListState = MutableStateFlow(ProjectsList())
     val projectListState = _projectListState.asStateFlow()
 
-    suspend fun setProject(newProject: Project) {
-        _projectListState.value
-            .apply {
-                currentProject = newProject
-                paths += newProject
-            }.let {
-                _projectListState.emit(it)
-            }
-    }
-
-    suspend fun removeProject(project: Project) {
-        _projectListState.value.apply {
-            if (currentProject == project) {
-                currentProject = null
-            }
-            paths -= project
-        }.let {
-            _projectListState.emit(it)
+    fun setProject(newProject: Project) = _projectListState
+        .update { currentState ->
+            ProjectsList(
+                currentProject = newProject,
+                paths = currentState.paths.plus(newProject)
+            )
         }
-    }
+
+    fun removeProject(project: Project) = _projectListState
+        .update { currentState ->
+            ProjectsList(
+                currentProject = if (project == currentState.currentProject) null else currentState.currentProject,
+                paths = currentState.paths.minus(project)
+            )
+        }
 
 }

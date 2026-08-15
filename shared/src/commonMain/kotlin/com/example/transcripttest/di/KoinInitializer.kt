@@ -1,6 +1,6 @@
 package com.example.transcripttest.di
 
-import com.example.transcripttest.ProjectViewModel
+import com.example.transcripttest.ProjectListViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.core.logger.PrintLogger
@@ -20,7 +20,7 @@ fun initKoin(
     modules(
         platformModule,
         module {
-            viewModel<ProjectViewModel>()
+            viewModel<ProjectListViewModel>()
         }
     )
 }
