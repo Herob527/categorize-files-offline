@@ -16,6 +16,7 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
+            val version = "0.15.0"
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.annotations)
@@ -24,6 +25,10 @@ kotlin {
             implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.room3.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            implementation("io.github.vinceglb:filekit-core:${version}")
+            implementation("io.github.vinceglb:filekit-dialogs:${version}")
+            implementation("io.github.vinceglb:filekit-dialogs-compose:${version}")
+            implementation("io.github.vinceglb:filekit-coil:${version}")
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

@@ -8,5 +8,5 @@ data class Project(
     val audioPath: String = "audio",
     val absoluteRootPath: String = "",
     val dbName: String = "project.db",
-    val lastExportConfig: ExportConfig?,
+    val lastExportConfig: ExportConfig? = null,
 )

@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class ProjectViewModel : ViewModel() {
-    private val _projectState = MutableStateFlow(Project)
+    private val _projectState = MutableStateFlow(Project())
     val projectState = _projectState.asStateFlow()
 
     fun updateProject(project: Project) {
-        _projectState.update { currentProject -> currentProject.let { Project } }
+        _projectState.update { currentProject -> currentProject.let { project } }
 
     }
 }
