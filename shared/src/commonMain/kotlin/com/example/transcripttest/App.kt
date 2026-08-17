@@ -3,6 +3,8 @@ package com.example.transcripttest
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,16 @@ import com.example.transcripttest.ui.components.Sidebar
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
+
+val transition =
+    scaleIn(
+        initialScale = 1.1f,
+        animationSpec = tween()
+    ) + fadeIn(animationSpec = tween(500)) togetherWith scaleOut(
+        targetScale = 0.90f,
+        animationSpec = tween()
+    ) + fadeOut(animationSpec = tween(500))
+
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -55,22 +67,8 @@ fun App() {
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding + PaddingValues(8.dp)),
-                    transitionSpec = {
-                        (fadeIn(
-                            animationSpec = tween(500)
-                        )) togetherWith
-                                (fadeOut(
-                                    animationSpec = tween(500)
-                                ))
-                    },
-                    popTransitionSpec = {
-                        (fadeIn(
-                            animationSpec = tween(500)
-                        )) togetherWith
-                                (fadeOut(
-                                    animationSpec = tween(500)
-                                ))
-                    }
+                    transitionSpec = { transition },
+                    popTransitionSpec = { transition }
                 )
             }
         }
