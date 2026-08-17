@@ -20,16 +20,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.transcripttest.ProjectListViewModel
-import com.example.transcripttest.Routes
+import com.example.transcripttest.Route
+import com.example.transcripttest.navigation.Navigator
+import com.example.transcripttest.sidebarRoutes
+import com.example.transcripttest.title
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun Sidebar(
-    navController: NavHostController,
-    currentScreen: Routes,
+    currentScreen: Route,
     modifier: Modifier = Modifier,
+    navigator: Navigator = koinInject(),
     viewModel: ProjectListViewModel = koinViewModel()
 ) {
     val projectList by viewModel.projectListState.collectAsState()
@@ -50,17 +53,17 @@ fun Sidebar(
                     strokeWidth
                 )
             }) {
-        Routes.entries.minus(Routes.Startup).forEach {
+        sidebarRoutes.forEach { route ->
             TextButton(
                 shape = RectangleShape,
-                onClick = { navController.navigate(it.name) },
+                onClick = { navigator.navigateSingleTop(route) },
                 colors = ButtonDefaults.textButtonColors(
-                    containerColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                    contentColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.surface else Color.Unspecified,
+                    containerColor = if (currentScreen == route) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                    contentColor = if (currentScreen == route) MaterialTheme.colorScheme.surface else Color.Unspecified,
                 )
             ) {
                 Text(
-                    it.title,
+                    route.title,
                     modifier = Modifier
                         .fillMaxWidth()
                         .minimumInteractiveComponentSize(),

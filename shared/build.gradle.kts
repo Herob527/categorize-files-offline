@@ -21,6 +21,8 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.annotations)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.navigation3)
+            implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.room3.runtime)

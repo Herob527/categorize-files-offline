@@ -13,15 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.transcripttest.ProjectListViewModel
-import com.example.transcripttest.Routes
+import com.example.transcripttest.Route
+import com.example.transcripttest.navigation.Navigator
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OpenedProjectsRow(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
+    navigator: Navigator = koinInject(),
     viewModel: ProjectListViewModel = koinViewModel(),
 ) {
     val projectList by viewModel.projectListState.collectAsState()
@@ -36,7 +37,7 @@ fun OpenedProjectsRow(
         }
         IconButton(
             onClick = {
-                navController.navigate(Routes.Startup.name)
+                navigator.navigateSingleTop(Route.Startup)
             },
             modifier = Modifier.size(16.dp)
         ) {

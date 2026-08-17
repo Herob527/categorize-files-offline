@@ -22,14 +22,15 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.navigation.NavController
 import com.example.transcripttest.ProjectListViewModel
-import com.example.transcripttest.Routes
+import com.example.transcripttest.Route
 import com.example.transcripttest.dataclasses.Project
+import com.example.transcripttest.navigation.Navigator
 import io.github.vinceglb.filekit.absolutePath
 import io.github.vinceglb.filekit.dialogs.compose.rememberDirectoryPickerLauncher
 import io.github.vinceglb.filekit.utils.toPath
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import transcripttest.shared.generated.resources.Res
 import transcripttest.shared.generated.resources.cross
@@ -37,7 +38,7 @@ import transcripttest.shared.generated.resources.cross
 @OptIn(ExperimentalGridApi::class)
 @Composable
 fun StartupScreen(
-    navController: NavController,
+    navigator: Navigator = koinInject(),
     viewModel: ProjectListViewModel = koinViewModel()
 ) {
     val launcher = rememberDirectoryPickerLauncher(
@@ -51,7 +52,7 @@ fun StartupScreen(
             } else {
                 Project(absoluteRootPath = directory.absolutePath()).let {
                     viewModel.setProject(it)
-                    navController.navigate(Routes.Dashboard.name)
+                    navigator.navigateSingleTop(Route.Dashboard)
                 }
                 // Handle the selected directory
             }
@@ -97,7 +98,7 @@ fun StartupScreen(
                         Button(
                             onClick = {
                                 viewModel.setProject(project)
-                                navController.navigate(Routes.Dashboard.name)
+                                navigator.navigateSingleTop(Route.Dashboard)
                             },
                             colors = ButtonDefaults.buttonColors(),
                             shape = RectangleShape,
