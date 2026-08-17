@@ -1,6 +1,7 @@
 package com.example.transcripttest
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,17 +10,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,7 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,7 +56,7 @@ enum class Routes(val title: String) {
 @Composable
 @Preview
 fun App(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = Routes.valueOf(
@@ -58,57 +65,83 @@ fun App(
     remember { initKoin() }
 
     val projectListViewModel = koinViewModel<ProjectListViewModel>()
+
+    val projectList by projectListViewModel.projectListState.collectAsState()
     Scaffold { innerPadding ->
-        Row(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding)
-        ) {
-            Column(
+        Column {
+            Row(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .visible(projectListViewModel.projectListState.value.currentProject != null)
-                    .width(100.dp)
-                    .drawBehind {
-                        val strokeWidth = 1 * density
-                        val y = size.height - strokeWidth / 2
+                    .border(2.dp, Color.Black)
+                    .fillMaxWidth()
+            ) {
+                projectList.openedProjects.forEach {
+                    Text(it.dbName)
+                }
+                IconButton(
+                    onClick = {
+                        navController.navigate(Routes.Startup.name)
+                    },
+                    modifier = Modifier.size(16.dp)
+                ) {
+                    Text("+", fontSize = 12.sp)
 
-                        drawLine(
-                            Color.Black,
-                            Offset(size.width + 1, 0f),
-                            Offset(size.width + 1, y),
-                            strokeWidth
-                        )
-                    }) {
-                Routes.entries.minus(Routes.Startup).forEach {
-                    TextButton(
-                        shape = RectangleShape,
-                        onClick = { navController.navigate(it.name) },
-                        colors = ButtonDefaults.textButtonColors(
-                            containerColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                            contentColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.surface else Color.Unspecified,
-                        )
-                    ) {
-
-                        Text(
-                            it.title,
-                            modifier = Modifier.fillMaxWidth()
-                                .minimumInteractiveComponentSize(),
-                            textAlign = TextAlign.Start
-                        )
-                    }
                 }
             }
-            NavHost(
-                navController = navController,
-                startDestination = Routes.Startup.name,
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-                    .padding(innerPadding + PaddingValues(8.dp))
+            Row(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(innerPadding)
             ) {
-                composable(route = Routes.Startup.name) { StartupScreen(navController) }
-                composable(route = Routes.Dashboard.name) { DashboardScreen() }
-                composable(route = Routes.Transcript.name) { TranscriptScreen() }
-                composable(route = Routes.Export.name) { ExportScreen() }
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .visible(projectListViewModel.projectListState.value.currentProject != null)
+                        .width(100.dp)
+                        .drawBehind {
+                            val strokeWidth = 1 * density
+                            val y = size.height - strokeWidth / 2
 
+                            drawLine(
+                                Color.Black,
+                                Offset(size.width + 1, 0f),
+                                Offset(size.width + 1, y),
+                                strokeWidth
+                            )
+                        }) {
+                    Routes.entries.minus(Routes.Startup).forEach {
+                        TextButton(
+                            shape = RectangleShape,
+                            onClick = { navController.navigate(it.name) },
+                            colors = ButtonDefaults.textButtonColors(
+                                containerColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                                contentColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.surface else Color.Unspecified,
+                            )
+                        ) {
+
+                            Text(
+                                it.title,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .minimumInteractiveComponentSize(),
+                                textAlign = TextAlign.Start
+                            )
+                        }
+                    }
+                }
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.Startup.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(innerPadding + PaddingValues(8.dp))
+                ) {
+                    composable(route = Routes.Startup.name) { StartupScreen(navController) }
+                    composable(route = Routes.Dashboard.name) { DashboardScreen() }
+                    composable(route = Routes.Transcript.name) { TranscriptScreen() }
+                    composable(route = Routes.Export.name) { ExportScreen() }
+
+                }
             }
         }
     }

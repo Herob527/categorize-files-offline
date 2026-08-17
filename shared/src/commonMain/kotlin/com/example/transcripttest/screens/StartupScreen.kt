@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -22,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.transcripttest.ProjectListViewModel
 import com.example.transcripttest.Routes
 import com.example.transcripttest.dataclasses.Project
@@ -36,9 +36,10 @@ import transcripttest.shared.generated.resources.cross
 
 @OptIn(ExperimentalGridApi::class)
 @Composable
-fun StartupScreen(navController: NavController) {
-    val projectListViewModel = koinViewModel<ProjectListViewModel>()
-
+fun StartupScreen(
+    navController: NavController,
+    viewModel: ProjectListViewModel = koinViewModel()
+) {
     val launcher = rememberDirectoryPickerLauncher(
         onError = { failure ->
             // A valid directory operation could not be completed
@@ -49,13 +50,13 @@ fun StartupScreen(navController: NavController) {
                 // The user canceled the picker
             } else {
                 Project(absoluteRootPath = directory.absolutePath()).let {
-                    projectListViewModel.setProject(it)
+                    viewModel.setProject(it)
                 }
                 // Handle the selected directory
             }
         },
     )
-    val projectList = projectListViewModel.projectListState.collectAsState()
+    val projectList by viewModel.projectListState.collectAsState()
 
     Column {
         Text("Startup")
@@ -65,7 +66,7 @@ fun StartupScreen(navController: NavController) {
         ) {
             Text("Pick a directory")
         }
-        projectList.value.let {
+        projectList.let {
             if (it.existingProjects.isEmpty()) {
                 return Column {
                     Text("No recent projects")
@@ -83,7 +84,7 @@ fun StartupScreen(navController: NavController) {
                             modifier = Modifier
                                 .zIndex(4f)
                                 .size(20.dp),
-                            onClick = { projectListViewModel.removeProject(project) },
+                            onClick = { viewModel.removeProject(project) },
                         ) {
                             Image(
                                 modifier = Modifier.fillMaxSize(),
@@ -94,7 +95,7 @@ fun StartupScreen(navController: NavController) {
                         }
                         Button(
                             onClick = {
-                                projectListViewModel.setProject(project)
+                                viewModel.setProject(project)
                                 navController.navigate(Routes.Dashboard.name)
                             },
                             colors = ButtonDefaults.buttonColors(),
