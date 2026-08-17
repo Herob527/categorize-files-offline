@@ -5,13 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,18 +19,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -49,9 +41,7 @@ import com.example.transcripttest.screens.StartupScreen
 import com.example.transcripttest.screens.TranscriptScreen
 import org.koin.compose.viewmodel.koinViewModel
 
-enum class Routes(val title: String) {
-    Dashboard("Dashboard"), Transcript("Transcript"), Export("Export"), Startup("Startup")
-}
+import com.example.transcripttest.ui.components.Sidebar
 
 @Composable
 @Preview
@@ -92,42 +82,10 @@ fun App(
                     .background(MaterialTheme.colorScheme.background)
                     .padding(innerPadding)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .visible(projectListViewModel.projectListState.value.currentProject != null)
-                        .width(100.dp)
-                        .drawBehind {
-                            val strokeWidth = 1 * density
-                            val y = size.height - strokeWidth / 2
-
-                            drawLine(
-                                Color.Black,
-                                Offset(size.width + 1, 0f),
-                                Offset(size.width + 1, y),
-                                strokeWidth
-                            )
-                        }) {
-                    Routes.entries.minus(Routes.Startup).forEach {
-                        TextButton(
-                            shape = RectangleShape,
-                            onClick = { navController.navigate(it.name) },
-                            colors = ButtonDefaults.textButtonColors(
-                                containerColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                                contentColor = if (currentScreen.name == it.name) MaterialTheme.colorScheme.surface else Color.Unspecified,
-                            )
-                        ) {
-
-                            Text(
-                                it.title,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .minimumInteractiveComponentSize(),
-                                textAlign = TextAlign.Start
-                            )
-                        }
-                    }
-                }
+                Sidebar(
+                    navController = navController,
+                    currentScreen = currentScreen
+                )
                 NavHost(
                     navController = navController,
                     startDestination = Routes.Startup.name,
