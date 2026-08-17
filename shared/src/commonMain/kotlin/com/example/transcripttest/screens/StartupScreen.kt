@@ -51,6 +51,7 @@ fun StartupScreen(
             } else {
                 Project(absoluteRootPath = directory.absolutePath()).let {
                     viewModel.setProject(it)
+                    navController.navigate(Routes.Dashboard.name)
                 }
                 // Handle the selected directory
             }
