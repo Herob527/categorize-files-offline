@@ -1,9 +1,11 @@
 package com.example.transcripttest.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.example.transcripttest.ProjectListViewModel
 import com.example.transcripttest.Route
 import com.example.transcripttest.navigation.Navigator
+import io.github.vinceglb.filekit.utils.toPath
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -30,10 +33,18 @@ fun OpenedProjectsRow(
     Row(
         modifier = modifier
             .border(2.dp, Color.Black)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         projectList.openedProjects.forEach {
-            Text(it.dbName)
+            Button(onClick = {
+                viewModel.setProject(it)
+            }) {
+
+                Text(it.absoluteRootPath.toPath().name)
+
+            }
+
         }
         IconButton(
             onClick = {
