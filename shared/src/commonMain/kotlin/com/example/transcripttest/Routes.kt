@@ -1,23 +1,29 @@
 package com.example.transcripttest
 
+import com.example.transcripttest.dataclasses.Project
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface Route {
-    @Serializable data object Dashboard : Route
-    @Serializable data object Transcript : Route
-    @Serializable data object Export : Route
-    @Serializable data object Startup : Route
-}
+sealed class Route {
+    abstract val title: String
 
-// Keep a way to get title if needed, maybe extension or map
-val Route.title: String
-    get() = when (this) {
-        Route.Dashboard -> "Dashboard"
-        Route.Transcript -> "Transcript"
-        Route.Export -> "Export"
-        Route.Startup -> "Startup"
+    @Serializable
+    data class Dashboard(val project: Project) : Route() {
+        override val title: String = "Dashboard"
     }
 
-// For sidebar iteration
-val sidebarRoutes = listOf(Route.Dashboard, Route.Transcript, Route.Export)
+    @Serializable
+    data class Transcript(val project: Project) : Route() {
+        override val title: String = "Transcript"
+    }
+
+    @Serializable
+    data class Export(val project: Project) : Route() {
+        override val title: String = "Export"
+    }
+
+    @Serializable
+    data object Startup : Route() {
+        override val title: String = "Startup"
+    }
+}

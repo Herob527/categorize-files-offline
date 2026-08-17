@@ -52,7 +52,7 @@ fun StartupScreen(
             } else {
                 Project(absoluteRootPath = directory.absolutePath()).let {
                     viewModel.setProject(it)
-                    navigator.navigateSingleTop(Route.Dashboard)
+                    navigator.navigateSingleTop(Route.Dashboard(it))
                 }
                 // Handle the selected directory
             }
@@ -98,7 +98,7 @@ fun StartupScreen(
                         Button(
                             onClick = {
                                 viewModel.setProject(project)
-                                navigator.navigateSingleTop(Route.Dashboard)
+                                navigator.navigateSingleTop(Route.Dashboard(project))
                             },
                             colors = ButtonDefaults.buttonColors(),
                             shape = RectangleShape,

@@ -1,9 +1,9 @@
 package com.example.transcripttest.ui.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.transcripttest.ProjectListViewModel
 import com.example.transcripttest.Route
 import com.example.transcripttest.navigation.Navigator
-import com.example.transcripttest.sidebarRoutes
-import com.example.transcripttest.title
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -36,12 +34,20 @@ fun Sidebar(
     viewModel: ProjectListViewModel = koinViewModel()
 ) {
     val projectList by viewModel.projectListState.collectAsState()
+    val project = projectList.currentProject
+    val isVisible = project != null && currentScreen != Route.Startup
+    val animatedWidth by animateDpAsState(targetValue = if (isVisible) 120.dp else 0.dp)
+
+    val sidebarRoutes = if (isVisible) listOf(
+        Route.Dashboard(project),
+        Route.Transcript(project),
+        Route.Export(project)
+    ) else listOf()
 
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .visible(projectList.currentProject != null)
-            .width(100.dp)
+            .width(animatedWidth)
             .drawBehind {
                 val strokeWidth = 1 * density
                 val y = size.height - strokeWidth / 2
@@ -54,16 +60,23 @@ fun Sidebar(
                 )
             }) {
         sidebarRoutes.forEach { route ->
+            val isSelected = when (currentScreen) {
+                is Route.Dashboard -> route is Route.Dashboard
+                is Route.Transcript -> route is Route.Transcript
+                is Route.Export -> route is Route.Export
+                else -> false
+            }
             TextButton(
                 shape = RectangleShape,
                 onClick = { navigator.navigateSingleTop(route) },
                 colors = ButtonDefaults.textButtonColors(
-                    containerColor = if (currentScreen == route) MaterialTheme.colorScheme.primary else Color.Unspecified,
-                    contentColor = if (currentScreen == route) MaterialTheme.colorScheme.surface else Color.Unspecified,
+                    containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                    contentColor = if (isSelected) MaterialTheme.colorScheme.surface else Color.Unspecified,
                 )
             ) {
                 Text(
                     route.title,
+                    softWrap = false,
                     modifier = Modifier
                         .fillMaxWidth()
                         .minimumInteractiveComponentSize(),

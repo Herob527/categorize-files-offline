@@ -1,5 +1,9 @@
 package com.example.transcripttest
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,7 +54,23 @@ fun App() {
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(innerPadding + PaddingValues(8.dp))
+                        .padding(innerPadding + PaddingValues(8.dp)),
+                    transitionSpec = {
+                        (fadeIn(
+                            animationSpec = tween(500)
+                        )) togetherWith
+                                (fadeOut(
+                                    animationSpec = tween(500)
+                                ))
+                    },
+                    popTransitionSpec = {
+                        (fadeIn(
+                            animationSpec = tween(500)
+                        )) togetherWith
+                                (fadeOut(
+                                    animationSpec = tween(500)
+                                ))
+                    }
                 )
             }
         }

@@ -32,15 +32,15 @@ fun OpenedProjectsRow(
 
     Row(
         modifier = modifier
-            .border(2.dp, Color.Black)
+            .border(1.dp, Color.Black)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         projectList.openedProjects.forEach {
             Button(onClick = {
                 viewModel.setProject(it)
+                navigator.navigate(Route.Dashboard(it))
             }) {
-
                 Text(it.absoluteRootPath.toPath().name)
 
             }
