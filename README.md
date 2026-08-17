@@ -23,8 +23,9 @@ Projects will be stored in folders on disk.
 - [ ] Pick folder to store project data
 - [ ] Display recent projects
 - [ ] Quick summary of project (directory, counts of audios and categories , current progress of transcription and categorization)
+- [ ] On top of the window there will be currently opened projects with option to close / open or add new
 
-#### Options
+#### Options / Dashboard
 
 Each project item will have configuration view (big dialog or separate route) with following options:
 
