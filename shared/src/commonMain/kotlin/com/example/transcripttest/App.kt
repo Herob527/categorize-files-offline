@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,14 +36,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.transcripttest.di.initKoin
+import com.example.transcripttest.screens.DashboardScreen
 import com.example.transcripttest.screens.ExportScreen
 import com.example.transcripttest.screens.StartupScreen
 import com.example.transcripttest.screens.TranscriptScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 enum class Routes(val title: String) {
-    Startup("Startup"),
-    Transcript("Transcript"),
-    Export("Export")
+    Dashboard("Dashboard"), Transcript("Transcript"), Export("Export"), Startup("Startup")
 }
 
 @Composable
@@ -55,15 +56,17 @@ fun App(
         backStackEntry?.destination?.route ?: Routes.Startup.name
     )
     remember { initKoin() }
+
+    val projectListViewModel = koinViewModel<ProjectListViewModel>()
     Scaffold { innerPadding ->
         Row(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
+                    .visible(projectListViewModel.projectListState.value.currentProject != null)
                     .width(100.dp)
                     .drawBehind {
                         val strokeWidth = 1 * density
@@ -75,9 +78,8 @@ fun App(
                             Offset(size.width + 1, y),
                             strokeWidth
                         )
-                    }
-            ) {
-                Routes.entries.forEach {
+                    }) {
+                Routes.entries.minus(Routes.Startup).forEach {
                     TextButton(
                         shape = RectangleShape,
                         onClick = { navController.navigate(it.name) },
@@ -89,8 +91,7 @@ fun App(
 
                         Text(
                             it.title,
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                                 .minimumInteractiveComponentSize(),
                             textAlign = TextAlign.Start
                         )
@@ -100,12 +101,11 @@ fun App(
             NavHost(
                 navController = navController,
                 startDestination = Routes.Startup.name,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
                     .padding(innerPadding + PaddingValues(8.dp))
             ) {
-                composable(route = Routes.Startup.name) { StartupScreen() }
+                composable(route = Routes.Startup.name) { StartupScreen(navController) }
+                composable(route = Routes.Dashboard.name) { DashboardScreen() }
                 composable(route = Routes.Transcript.name) { TranscriptScreen() }
                 composable(route = Routes.Export.name) { ExportScreen() }
 

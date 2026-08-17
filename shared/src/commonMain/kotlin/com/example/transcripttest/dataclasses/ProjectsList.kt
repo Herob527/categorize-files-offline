@@ -1,6 +1,10 @@
 package com.example.transcripttest.dataclasses
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ProjectsList(
     var currentProject: Project? = null,
-    var paths: List<Project> = listOf()
+    var existingProjects: List<Project> = listOf(),
+    var openedProjects: List<Project> = listOf()
 )

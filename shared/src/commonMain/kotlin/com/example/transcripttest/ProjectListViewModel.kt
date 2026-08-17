@@ -11,25 +11,36 @@ class ProjectListViewModel : ViewModel() {
     private val _projectListState = MutableStateFlow(ProjectsList())
     val projectListState = _projectListState.asStateFlow()
 
-    fun setProject(newProject: Project) = _projectListState
+    fun setProject(project: Project) = _projectListState
         .update { currentState ->
-            val newPaths = if (newProject in currentState.paths) {
-                listOf(newProject, *currentState.paths.minus(newProject).toTypedArray())
+            val existingProjects = if (project in currentState.existingProjects) {
+                listOf(project, *currentState.existingProjects.minus(project).toTypedArray())
             } else {
-                currentState.paths.plus(newProject)
+                currentState.existingProjects.plus(project)
             }
             ProjectsList(
-                currentProject = newProject,
-                paths = newPaths
+                currentProject = project,
+                existingProjects = existingProjects,
+                openedProjects = currentState.openedProjects.plus(project)
             )
         }
 
     fun removeProject(project: Project) = _projectListState
-        .update { currentState ->
+        .update {
             ProjectsList(
-                currentProject = if (project == currentState.currentProject) null else currentState.currentProject,
-                paths = currentState.paths.minus(project)
+                currentProject = if (project == it.currentProject) null else it.currentProject,
+                existingProjects = it.existingProjects - project,
+                openedProjects = it.openedProjects - project
             )
         }
+
+    fun closeProject(project: Project) = _projectListState.update {
+        ProjectsList(
+            currentProject = if (project == it.currentProject) null else it.currentProject,
+            existingProjects = it.existingProjects,
+            openedProjects = it.openedProjects - project
+
+        )
+    }
 
 }

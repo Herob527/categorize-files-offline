@@ -21,7 +21,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.transcripttest.ProjectListViewModel
+import com.example.transcripttest.Routes
 import com.example.transcripttest.dataclasses.Project
 import io.github.vinceglb.filekit.absolutePath
 import io.github.vinceglb.filekit.dialogs.compose.rememberDirectoryPickerLauncher
@@ -33,7 +36,7 @@ import transcripttest.shared.generated.resources.cross
 
 @OptIn(ExperimentalGridApi::class)
 @Composable
-fun StartupScreen() {
+fun StartupScreen(navController: NavController) {
     val projectListViewModel = koinViewModel<ProjectListViewModel>()
 
     val launcher = rememberDirectoryPickerLauncher(
@@ -63,7 +66,7 @@ fun StartupScreen() {
             Text("Pick a directory")
         }
         projectList.value.let {
-            if (it.paths.isEmpty()) {
+            if (it.existingProjects.isEmpty()) {
                 return Column {
                     Text("No recent projects")
                 }
@@ -73,7 +76,7 @@ fun StartupScreen() {
                     gap(8.dp)
                 }
             ) {
-                it.paths.forEach { project ->
+                it.existingProjects.forEach { project ->
                     Box(contentAlignment = Alignment.TopEnd) {
                         IconButton(
                             shape = RectangleShape,
@@ -90,7 +93,10 @@ fun StartupScreen() {
                             )
                         }
                         Button(
-                            onClick = { projectListViewModel.setProject(project) },
+                            onClick = {
+                                projectListViewModel.setProject(project)
+                                navController.navigate(Routes.Dashboard.name)
+                            },
                             colors = ButtonDefaults.buttonColors(),
                             shape = RectangleShape,
                             modifier = Modifier.fillMaxHeight()
