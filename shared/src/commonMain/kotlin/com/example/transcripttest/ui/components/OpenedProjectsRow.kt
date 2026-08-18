@@ -30,6 +30,8 @@ fun OpenedProjectsRow(
 ) {
     val projectList by viewModel.projectListState.collectAsState()
 
+    if (projectList.openedProjects.isEmpty()) return
+
     Row(
         modifier = modifier
             .border(1.dp, Color.Black)
