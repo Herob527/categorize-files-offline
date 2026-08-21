@@ -1,6 +1,5 @@
 package com.example.transcripttest.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,15 +12,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.transcripttest.ProjectListViewModel
@@ -49,6 +47,7 @@ fun OpenedProjectsRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+
         item {
             TextButton(
                 onClick = {
@@ -59,11 +58,12 @@ fun OpenedProjectsRow(
                     .width(24.dp)
                     .defaultMinSize(0.dp, 0.dp),
                 shape = RectangleShape,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                 contentPadding = PaddingValues.Zero,
             ) {
                 Text("+", fontSize = 12.sp)
             }
+
+            VerticalDivider(modifier = Modifier.height(24.dp))
         }
         projectList.openedProjects.forEach {
             val isSelected = projectList.currentProject == it
@@ -93,7 +93,14 @@ fun OpenedProjectsRow(
                         shape = RectangleShape,
                         contentPadding = PaddingValues.Zero,
                         colors = ButtonDefaults.textButtonColors(containerColor = Color.Red),
-                        onClick = { viewModel.removeProject(it) },
+                        onClick = {
+                            viewModel.closeProject(it)
+                            if (projectList.openedProjects.size == 1) {
+                                navigator.navigate(
+                                    Route.Startup
+                                )
+                            }
+                        },
                     ) {
                         Text("X", fontSize = 10.sp, color = Color.White)
                     }

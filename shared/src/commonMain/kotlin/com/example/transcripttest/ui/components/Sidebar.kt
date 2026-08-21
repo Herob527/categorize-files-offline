@@ -9,13 +9,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
@@ -48,17 +47,7 @@ fun Sidebar(
         modifier = modifier
             .fillMaxHeight()
             .width(animatedWidth)
-            .drawBehind {
-                val strokeWidth = 1 * density
-                val y = size.height - strokeWidth / 2
-
-                drawLine(
-                    Color.Black,
-                    Offset(size.width + 1, 0f),
-                    Offset(size.width + 1, y),
-                    strokeWidth
-                )
-            }) {
+    ) {
         sidebarRoutes.forEach { route ->
             val isSelected = when (currentScreen) {
                 is Route.Dashboard -> route is Route.Dashboard
@@ -85,4 +74,5 @@ fun Sidebar(
             }
         }
     }
+    VerticalDivider(color = MaterialTheme.colorScheme.primary)
 }
