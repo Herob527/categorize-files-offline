@@ -48,7 +48,7 @@ fun OpenedProjectsRow(
     ) {
 
 
-        item {
+        stickyHeader {
             TextButton(
                 onClick = {
                     navigator.navigateSingleTop(Route.Startup)
